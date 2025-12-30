@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daftar Akaun Baru</title>
+    <style>
+        /* Guna style yang sama macam login.html supaya nampak seragam */
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                              url('https://i.postimg.cc/pr2Qq6Dq/Untitled-design.png');
+            background-size: cover; text-align: center; color: white; font-family: sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0;
+        }
+        .box { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 30px; border-radius: 15px; border: 2px solid #5dade2; width: 300px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
+        .btn { background: #2ecc71; color: white; border: none; padding: 12px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>DAFTAR AKAUN</h1>
+    <div class="box">
+        <input type="text" id="newName" placeholder="Username Baru">
+        <input type="password" id="newPass" placeholder="Password Baru">
+        <button class="btn" onclick="daftar()">DAFTAR SEKARANG</button>
+        <p><a href="login.html" style="color: #5dade2;">Dah ada akaun? Login sini</a></p>
+    </div>
+
+    <script>
+        function daftar() {
+            const user = document.getElementById('newName').value.trim();
+            const pass = document.getElementById('newPass').value.trim();
+
+            if(user && pass) {
+                // Ambil data user lama dari localStorage
+                let users = JSON.parse(localStorage.getItem('databaseUser')) || [];
+                
+                // 1. Semak jika Nama sudah wujud (pendua)
+                const isUsernameTaken = users.some(u => u.nama === user.toLowerCase());
+                
+                // 2. Semak jika Password sudah wujud (pendua)
+                const isPasswordTaken = users.some(u => u.pass === pass);
+
+                if (isUsernameTaken) {
+                    alert("Maaf, Nama Pengguna ini sudah digunakan!");
+                    return; // Berhenti sini, jangan daftar
+                }
+
+                if (isPasswordTaken) {
+                    alert("Maaf, Kata Laluan ini sudah digunakan oleh orang lain!");
+                    return; // Berhenti sini, jangan daftar
+                }
+
+                // Jika semua OK, baru simpan
+                users.push({ nama: user.toLowerCase(), pass: pass });
+                localStorage.setItem('databaseUser', JSON.stringify(users));
+                
+                alert("Pendaftaran Berjaya! Sila Login.");
+                window.location.href = "login.html";
+            } else {
+                alert("Sila isi semua ruangan!");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Menu Undian - MLBB</title>
+    <style>
+         /* 1. SETTING BACKGROUND */
+        body {
+            /* Ganti link di bawah dengan link gambar kegemaran kau */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.0)), 
+                              url('https://i.postimg.cc/pr2Qq6Dq/Untitled-design.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* 2. TAJUK */
+        h1, h2 {
+            margin: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px #000; /* Kasi nampak teks timbul */
+        }
+
+        /* 3. BAHAGIAN BUTANG */
+        .nav-buttons {
+            margin: 25px 0;
+        }
+
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: 2px solid #ffffff;
+            padding: 10px 18px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* 4. SUSUNAN GAMBAR HERO */
+        .hero-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap; /* Supaya kalau skrin kecil, dia turun bawah */
+            justify-content: center;
+        }
+
+        .hero-card {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5); /* Kotak hitam nipis belakang hero */
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #3b82f6;
+        }
+
+        .hero-card img {
+            width: 120px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .hero-name {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        
+        /* 3. BAHAGIAN BUTANG DENGAN EFFECT */
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: 2px solid #ffffff;
+            padding: 10px 18px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: all 0.2s ease; /* Kasi effect smooth */
+            outline: none;
+        }
+
+        /* Effect masa letak mouse (Hover) */
+        .btn:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px); /* Butang naik sikit */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Effect MASA TEKAN (Active) */
+        .btn:active {
+            transform: translateY(2px); /* Butang turun bawah balik */
+            transform: scale(0.95); /* Butang mengecil sikit */
+            background-color: #1e3a8a;
+            box-shadow: inset 0 3px 5px rgba(0,0,0,0.5); /* Effect bayang kat dalam */
+        }
+    </style>
+</head>
+<body>
+    <h1>PENGUNDIAN</h1>
+    <h1>SEMULA WIRA</h1>
+
+    <div class="menu-container">
+        <button class="btn"onclick="location.href='admin_user.html'">ADMIN</button>
+        <button class="btn"onclick="location.href='senarai_pemain.html'">PEMAIN</button>
+        <button class="btn"onclick="location.href='keputusankad.html'">WIRA</button>
+        <button class="btn"onclick="location.href='Keputusan.html'">KEPUTUSAN</button>
+        <button class="btn"onclick="location.href='try2.html'">IMPORT</button>
+        <button class="btn" onclick="logoutSekarang()">LOGOUT</button>
+<script>
+    function logoutSekarang() {
+        // Ini akan padam status "admin" atau "pemain" tadi
+        sessionStorage.clear(); 
+        // Lepas tu baru hantar balik ke login page
+        window.location.href = 'login.html';
+    }
+</script>
+    </div>
+
+ <div class="hero-container">
+        <div class="hero-card">
+            <a href="https://imgbb.com/"><img src="https://i.ibb.co/v6bWTvkx/balmond.webp" alt="balmond" border="0"></a>
+            <div class="hero-name">C1</div>
+        </div>
+        <div class="hero-card">
+            <a href="https://imgbb.com/"><img src="https://i.ibb.co/rKQXsBqv/layla.webp" alt="layla" border="0"></a>
+            <div class="hero-name">C2</div>
+        </div>
+        <div class="hero-card">
+            <a href="https://imgbb.com/"><img src="https://i.ibb.co/YBYmsV8Y/tigreal.webp" alt="tigreal" border="0"></a>
+            <div class="hero-name">C3</div>
+        </div>
+        <div class="hero-card">
+            <a href="https://imgbb.com/"><img src="https://i.ibb.co/yc1xKKtb/change.webp" alt="change" border="0"></a>
+            <div class="hero-name">C4</div>
+        </div>
+    </div>
+    
+</body>
+</html>

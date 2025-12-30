@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Undian Wira</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                              url('https://i.postimg.cc/pr2Qq6Dq/Untitled-design.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 10px #3b82f6;
+            margin-bottom: 30px;
+        }
+
+        /* Container untuk Kad */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Design Kad */
+        .wira-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .wira-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .wira-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 3px solid #3b82f6;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .nama-wira {
+            font-size: 20px;
+            font-weight: bold;
+            color: #3b82f6;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .nama-pengundi {
+            font-size: 14px;
+            color: #ccc;
+            margin: 10px 0 5px 0;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .timestamp {
+            font-size: 10px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        .btn-kembali {
+            display: block;
+            width: 200px;
+            margin: 40px auto;
+            padding: 12px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+
+        .btn-kembali:hover {
+            background: #2563eb;
+            box-shadow: 0 0 15px #3b82f6;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>HASIL UNDIAN PEMAIN</h1>
+
+    <div class="card-grid" id="cardGrid">
+        </div>
+
+    <a href="try2.html" class="btn-kembali">KEMBALI MENGUNDI</a>
+    <a href="page2.html" class="btn-kembali">BALIK KE LAMAN UTAMA</a>
+
+    <script>
+        // Konfigurasi Firebase
+        const firebaseConfig = { 
+            databaseURL: "https://undianwira-default-rtdb.asia-southeast1.firebasedatabase.app/" 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Mengambil data secara real-time
+        database.ref('undian/').on('value', (snapshot) => {
+            const cardGrid = document.getElementById('cardGrid');
+            cardGrid.innerHTML = ""; // Kosongkan grid sebelum isi baru
+            
+            const data = snapshot.val();
+
+            if (data) {
+                // Susun data supaya undian terbaru berada di atas
+                Object.keys(data).reverse().forEach(key => {
+                    const u = data[key];
+
+                    // Bina struktur kad
+                    const card = `
+                        <div class="wira-card">
+                            <img src="${u.gambar}" alt="${u.namaWira}">
+                            <div class="card-body">
+                                <p class="nama-wira">${u.namaWira}</p>
+                                <p class="nama-pengundi">DIUNDI OLEH:</p>
+                                <p class="user-name">${u.pengundi}</p>
+                                <p class="timestamp">${u.waktu}</p>
+                            </div>
+                        </div>
+                    `;
+                    cardGrid.innerHTML += card;
+                });
+            } else {
+                cardGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Tiada rekod undian ditemui.</p>";
+            }
+        });
+    </script>
+
+</body>
+</html>
+

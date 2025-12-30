@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Reset - Sistem Undian</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                              url('https://i.postimg.cc/pr2Qq6Dq/Untitled-design.png');
+            background-size: cover; background-position: center; color: white;
+            font-family: sans-serif; text-align: center; min-height: 100vh;
+            margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        h1 { margin: 2px; text-transform: uppercase; text-shadow: 2px 2px 4px #000; }
+
+        .borang-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            width: 350px; 
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .warning-text {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .btn-reset {
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .btn-reset:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-kembali {
+            margin-top: 15px;
+            display: inline-block;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>PANEL KAWALAN ADMIN</h1>
+
+    <div class="borang-container">
+        <h3>RESET KEPUTUSAN</h3>
+        <p class="warning-text">AMARAN: Tindakan ini akan memadamkan SEMUA data undian pemain secara kekal!</p>
+        
+        <button class="btn-reset" onclick="resetData()">PADAM SEMUA DATA ></button>
+        
+        <br>
+        <a href="trycopy.html" class="btn-kembali">KEMBALI KE KEPUTUSAN</a>
+    </div>
+
+<script>
+    // Konfigurasi Firebase (Pastikan sama dengan fail undian anda)
+    const firebaseConfig = { 
+        databaseURL: "https://undianwira-default-rtdb.asia-southeast1.firebasedatabase.app/" 
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function resetData() {
+        // Pengesahan keselamatan (Confirm box)
+        const sahkan = confirm("Adakah anda pasti ingin memadamkan keseluruhan keputusan undian? Data yang dipadam tidak boleh dikembalikan.");
+
+        if (sahkan) {
+            // Memadam folder 'undian' dalam Firebase
+            database.ref('undian/').remove()
+            .then(() => {
+                alert("Semua data undian telah berjaya dipadamkan!");
+                // Clear juga localStorage supaya orang boleh mengundi semula
+                localStorage.removeItem("telahMengundi");
+                location.reload();
+            })
+            .catch((error) => {
+                alert("Gagal memadam data: " + error.message);
+            });
+        }
+    }
+</script>
+</body>
+</html>

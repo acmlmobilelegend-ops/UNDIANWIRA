@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Reset Undian Pemain</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                              url('https://i.postimg.cc/pr2Qq6Dq/Untitled-design.png');
+            background-size: cover; background-attachment: fixed;
+            color: white; font-family: sans-serif; padding: 20px; margin: 0;
+        }
+
+        h1 { text-align: center; text-transform: uppercase; color: #5dade2; }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px; max-width: 1200px; margin: auto;
+        }
+
+        .wira-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e74c3c; /* Warna merah untuk mod admin */
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
+        .wira-card img {
+            width: 100%; height: 250px; object-fit: cover;
+        }
+
+        /* Butang Reset (Padam) */
+        .btn-reset-user {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .btn-reset-user:hover { background: #c0392b; transform: scale(1.1); }
+
+        .info-box { padding: 10px; }
+        .nama-wira { font-weight: bold; color: #5dade2; margin: 5px 0; }
+        .nama-pemain { font-size: 14px; text-transform: uppercase; margin: 0; }
+
+        .btn-kembali {
+            display: block; width: 150px; margin: 30px auto; padding: 10px;
+            background: #5dade2; color: white; text-align: center;
+            text-decoration: none; border-radius: 5px; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>KONTROL ADMIN: RESET PEMAIN</h1>
+    <p style="text-align:center; color: #ccc;">Klik butang <b>X</b> pada kad untuk reset undian pemain tertentu.</p>
+
+    <div class="card-grid" id="adminGrid">
+        </div>
+
+    <a href="trycopy.html" class="btn-kembali">KEMBALI</a>
+
+    <script>
+        const firebaseConfig = { 
+            databaseURL: "https://undianwira-default-rtdb.asia-southeast1.firebasedatabase.app/" 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Paparkan data undian
+        database.ref('undian/').on('value', (snapshot) => {
+            const adminGrid = document.getElementById('adminGrid');
+            adminGrid.innerHTML = "";
+            const data = snapshot.val();
+
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    const u = data[key];
+                    adminGrid.innerHTML += `
+                        <div class="wira-card">
+                            <button class="btn-reset-user" onclick="resetPemain('${key}', '${u.pengundi}')">X</button>
+                            <img src="${u.gambar}">
+                            <div class="info-box">
+                                <p class="nama-wira">${u.namaWira}</p>
+                                <p class="nama-pemain">${u.pengundi}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                adminGrid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Tiada rekod undian.</p>";
+            }
+        });
+
+        // Fungsi Reset Pemain Tertentu
+        function resetPemain(key, nama) {
+            const sahkan = confirm("Adakah anda pasti ingin reset undian daripada " + nama + "?");
+            
+            if (sahkan) {
+                database.ref('undian/' + key).remove()
+                .then(() => {
+                    alert("Undian " + nama + " telah dipadam.");
+                })
+                .catch((error) => {
+                    alert("Gagal padam: " + error.message);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

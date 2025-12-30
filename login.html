@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login - MLBB Vote</title>
+    <style>
+          /* 1. SETTING BACKGROUND */
+        body {
+            /* Ganti link di bawah dengan link gambar kegemaran kau */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.0)), 
+                              url('https://i.postimg.cc/pr2Qq6Dq/Untitled-design.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* 2. TAJUK */
+        h1, h2 {
+            margin: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px #000; /* Kasi nampak teks timbul */
+        }
+
+        .login-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); /* Effect kabur belakang kotak */
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #5dade2;
+            width: 300px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box; /* Supaya padding tak buat input melimpah */
+        }
+
+        .btn-login {
+            background-color: #5dade2;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn-login:hover { background-color: #3498db; }
+        .btn-login:active { transform: scale(0.95); }
+
+        #error-msg {
+            color: #ff4d4d;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none; /* Sorok mesej ralat pada awalnya */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>PENGUNDIAN</h1>
+    <h2>SEMULA WIRA</h2>
+
+    <div class="login-box">
+        <h3>SILA LOG MASUK</h3>
+        
+        <div class="input-group">
+            <label>Username :</label>
+            <input type="text" id="username" placeholder="Masukkan nama...">
+        </div>
+        
+        <div class="input-group">
+            <label>Password :</label>
+            <input type="password" id="password" placeholder="Masukkan password...">
+        </div>
+
+        <button class="btn-login" onclick="prosesLogin()">LOGIN</button>
+        <p id="error-msg">Username atau Password salah!</p>
+         <p><a href="signup.html" style="color: #5dade2;">Belum mempunyai akun? Cipta akun</a></p>
+    </div>
+
+    <script>
+    function prosesLogin() {
+    const inputUser = document.getElementById('username').value.toLowerCase();
+    const inputPass = document.getElementById('password').value;
+    
+    let users = JSON.parse(localStorage.getItem('databaseUser')) || [];
+    let userIndex = users.findIndex(u => u.nama === inputUser && u.pass === inputPass);
+
+    if (userIndex !== -1 || (inputUser === "admin" && inputPass === "123")) {
+        // Jika bukan admin (pemain biasa), set status online jadi true
+        if (userIndex !== -1) {
+            users[userIndex].isOnline = true; 
+            localStorage.setItem('databaseUser', JSON.stringify(users));
+        }
+        
+        sessionStorage.setItem("statusLogin", inputUser === "admin" ? "admin" : "pemain");
+        sessionStorage.setItem("currentUser", inputUser); // Simpan siapa yang tengah login
+        window.location.href = "index.html";
+    } else {
+        document.getElementById('error-msg').style.display = "block";
+    }
+}
+</script>
+
+</body>
+</html>

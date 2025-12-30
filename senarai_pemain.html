@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Senarai Pemain - MLBB</title>
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                              url('https://wallpapercave.com/wp/wp4535354.jpg');
+            background-size: cover; 
+            background-attachment: fixed;
+            color: white; 
+            font-family: sans-serif;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 50px;
+            margin: 0;
+        }
+        h1 {
+            text-shadow: 2px 2px 10px #5dade2;
+            text-transform: uppercase;
+        }
+        table {
+            width: 80%; 
+            border-collapse: collapse; 
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px); 
+            border-radius: 10px; 
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        th, td { 
+            padding: 15px; 
+            border: 1px solid rgba(93, 173, 226, 0.3); 
+            text-align: center; 
+        }
+        th { 
+            background-color: #5dade2; 
+            color: white; 
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .btn-back { 
+            margin-top: 30px; 
+            padding: 10px 25px; 
+            background: #3498db; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-back:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        .status-badge { 
+            padding: 4px 10px; 
+            border-radius: 4px; 
+            font-size: 11px; 
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>PEMAIN YANG BERDAFTAR</h1>
+    
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Nama Hero / Pemain</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="userList">
+            </tbody>
+    </table>
+
+    <a href="index.html" class="btn-back">< KEMBALI KE UTAMA</a>
+
+    <script>
+        function paparPemain() {
+            // Ambil data dari localStorage
+            const users = JSON.parse(localStorage.getItem('databaseUser')) || [];
+            const tableBody = document.getElementById('userList');
+            
+            // Kosongkan jadual sebelum isi
+            tableBody.innerHTML = "";
+
+            if (users.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='3'>Tiada pemain berdaftar dijumpai.</td></tr>";
+                return;
+            }
+
+            users.forEach((user, index) => {
+                // Logik Status: Jika user.isOnline true, hijau. Jika false/tiada, kelabu.
+                let statusWarna = user.isOnline ? "#2ecc71" : "#95a5a6";
+                let statusTeks = user.isOnline ? "ONLINE" : "OFFLINE";
+
+                let row = `<tr>
+                    <td>${index + 1}</td>
+                    <td style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">${user.nama}</td>
+                    <td>
+                        <span class="status-badge" style="background: ${statusWarna};">
+                            ${statusTeks}
+                        </span>
+                    </td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Jalankan fungsi sebaik sahaja halaman selesai dimuatkan
+        window.onload = paparPemain;
+    </script>
+
+</body>
+</html>

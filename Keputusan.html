@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Keputusan</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                              url('https://i.postimg.cc/pr2Qq6Dq/Untitled-design.png');
+            background-size: cover; color: white; font-family: sans-serif; text-align: center; padding: 20px;
+        }
+        .container { max-width: 800px; margin: auto; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 15px; border: 1px solid #5dade2; }
+        table { width: 100%; border-collapse: collapse; background: white; color: #333; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        th { background: #3b82f6; color: white; }
+        .img-table { width: 40px; height: 40px; object-fit: cover; border-radius: 5px; }
+        .btn-kembali { margin-top: 20px; padding: 10px 20px; background: #5dade2; color: white; text-decoration: none; display: inline-block; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>RANKING PERATUSAN TERTINGGI</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ranking</th>
+                    <th>Gambar</th>
+                    <th>Wira</th>
+                    <th>Undi</th>
+                    <th>Peratus</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <a href="try2.html" class="btn-kembali">KEMBALI</a>
+    </div>
+
+<script>
+    const firebaseConfig = { databaseURL: "https://undianwira-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    database.ref('undian/').on('value', (snapshot) => {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = "";
+        const data = snapshot.val();
+        if (data) {
+            let stats = {}; let total = 0;
+            Object.values(data).forEach(u => {
+                total++;
+                if (!stats[u.namaWira]) stats[u.namaWira] = { jml: 0, img: u.gambar };
+                stats[u.namaWira].jml++;
+            });
+            const sorted = Object.entries(stats).sort((a, b) => b[1].jml - a[1].jml);
+            sorted.forEach(([name, info], i) => {
+                const peratus = ((info.jml / total) * 100).toFixed(1);
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td><img src="${info.img}" class="img-table"></td>
+                        <td>${name}</td>
+                        <td>${info.jml}</td>
+                        <td style="font-weight:bold; color:#3b82f6;">${peratus}%</td>
+                    </tr>`;
+            });
+        }
+    });
+</script>
+</body>
+</html>
